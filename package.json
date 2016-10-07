@@ -1,0 +1,36 @@
+{
+  "name": "react-native-twitter",
+  "description": "react-native-twitter",
+  "version": "0.0.1",
+  "author": "Piroro-hs",
+  "bugs": {
+    "url": "https://github.com/Piroro-hs/react-native-twitter/issues"
+  },
+  "dependencies": {
+    "jssha": "^2.2.0",
+    "url-search-params": "^0.6.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2",
+    "eslint-config-piroro": "github:piroro-hs/eslint-config-piroro"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "package.json",
+    "src"
+  ],
+  "homepage": "https://github.com/Piroro-hs/react-native-twitter#readme",
+  "license": "MIT",
+  "main": "./src/index.js",
+  "peerDependencies": {
+    "react-native": ">=0.39.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Piroro-hs/react-native-twitter.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
