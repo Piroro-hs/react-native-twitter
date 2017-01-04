@@ -20,6 +20,7 @@
     "url": "https://github.com/Piroro-hs/react-native-twitter/issues"
   },
   "dependencies": {
+    "eventemitter3": "^2.0.2",
     "jssha": "^2.2.0",
     "url-search-params": "^0.6.1"
   },
@@ -36,6 +37,7 @@
     "LICENSE",
     "README.md",
     "package.json",
+    "android",
     "src"
   ],
   "homepage": "https://github.com/Piroro-hs/react-native-twitter#readme",

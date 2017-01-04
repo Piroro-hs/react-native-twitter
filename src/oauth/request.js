@@ -1,6 +1,6 @@
 import JsSha from 'jssha';
 
-import query from './query';
+import query from '../util/query';
 
 function rfc3986(str) {
   return encodeURIComponent(str).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16)}`);

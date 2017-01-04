@@ -1,7 +1,10 @@
 import auth from './oauth/auth';
-
-const RNTwitter = {};
+import stream from './stream';
 
 export {auth};
 
-export default RNTwitter;
+export default function twitter(tokens) {
+  return {
+    stream: stream.bind(undefined, tokens),
+  };
+}
