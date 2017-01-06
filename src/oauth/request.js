@@ -52,7 +52,7 @@ export default function request(
           .map(([k, v]) => `${rfc3986(k)}="${rfc3986(v)}"`)
           .join(', ')
       }`,
-      ...method !== 'GET' || method !== 'HEAD' ?
+      ...method !== 'GET' && method !== 'HEAD' ?
         {'Content-Type': 'application/x-www-form-urlencoded'} :
         {},
       ...headers,

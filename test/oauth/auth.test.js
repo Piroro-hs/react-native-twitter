@@ -36,6 +36,6 @@ test.beforeEach((t) => {
 test(t => auth({consumerKey, consumerSecret}, t.context.promise, {accessType: 'read'})
   .catch((url) => {
     // console.log(url);
-    t.regex(url, /^https:\/\/api.twitter.com\/oauth\/authorize?/);
+    t.regex(url, /^https:\/\/api.twitter.com\/oauth\/authorize/);
   }),
 );
