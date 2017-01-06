@@ -3,14 +3,16 @@ import {Linking} from 'react-native';
 import URLSearchParams from 'url-search-params';
 
 import request from './request';
+import query from '../util/query';
 
-function getRequestToken(consumerKey, consumerSecret, callbackUrl = 'oob') {
+function getRequestToken(tokens, callbackUrl, accessType) {
   const method = 'POST';
   const url = 'https://api.twitter.com/oauth/request_token';
-  return request(url, {method}, {consumerKey, consumerSecret}, {oauth_callback: callbackUrl})
+  const body = accessType ? {x_auth_access_type: accessType} : {};
+  return request(url, {method, body}, tokens, {oauth_callback: callbackUrl})
     .then(response => response.text())
-    .then((query) => {
-      const params = new URLSearchParams(query);
+    .then((text) => {
+      const params = new URLSearchParams(text);
       return {
         requestToken: params.get('oauth_token'),
         requestTokenSecret: params.get('oauth_token_secret'),
@@ -19,10 +21,7 @@ function getRequestToken(consumerKey, consumerSecret, callbackUrl = 'oob') {
 }
 
 function getAccessToken(
-  consumerKey,
-  consumerSecret,
-  requestToken,
-  requestTokenSecret,
+  {consumerKey, consumerSecret, requestToken, requestTokenSecret},
   oauthVerifier,
 ) {
   const method = 'POST';
@@ -34,8 +33,8 @@ function getAccessToken(
     {oauth_verifier: oauthVerifier},
   )
     .then(response => response.text())
-    .then((query) => {
-      const params = new URLSearchParams(query);
+    .then((text) => {
+      const params = new URLSearchParams(text);
       return {
         accessToken: params.get('oauth_token'),
         accessTokenSecret: params.get('oauth_token_secret'),
@@ -60,19 +59,22 @@ Linking.addEventListener('url', ({url}) => {
   }
 });
 
-export default async function auth(consumerKey, consumerSecret, callbackUrl) {
+export default async function auth(
+  tokens,
+  callbackUrl,
+  {accessType, forSignIn = false, forceLogin = false, screenName = ''} = {},
+) {
   const usePin = typeof callbackUrl.then === 'function';
   const {requestToken, requestTokenSecret} = await getRequestToken(
-    consumerKey,
-    consumerSecret,
+    tokens,
     usePin ? 'oob' : callbackUrl,
+    accessType,
   );
-  Linking.openURL(`https://api.twitter.com/oauth/authorize?oauth_token=${requestToken}`);
+  Linking.openURL(`https://api.twitter.com/oauth/${forSignIn ? 'authenticate' : 'authorize'}?${
+    query({oauth_token: requestToken, force_login: forceLogin, screen_name: screenName})
+  }`);
   return getAccessToken(
-    consumerKey,
-    consumerSecret,
-    requestToken,
-    requestTokenSecret,
+    {...tokens, requestToken, requestTokenSecret},
     await (
       usePin ?
         callbackUrl :

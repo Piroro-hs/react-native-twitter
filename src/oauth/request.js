@@ -21,38 +21,43 @@ function createSignature(
 
 export default function request(
   url,
-  {method, headers = {}, ...opts},
+  {method, headers = {}, body = {}, params = {}, ...opts},
   {consumerKey, consumerSecret, oauthToken = '', oauthTokenSecret = ''},
-  extraParams = {},
+  extraOAuthParams = {},
 ) {
-  const authParams = {
+  const oauthParams = {
     oauth_consumer_key: consumerKey,
     oauth_nonce: Math.random(),
     oauth_signature_method: 'HMAC-SHA1',
     oauth_timestamp: Math.floor(Date.now() / 1000),
     ...oauthToken ? {oauth_token: oauthToken} : {},
     oauth_version: '1.0',
-    ...extraParams,
+    ...extraOAuthParams,
   };
-  return fetch(url, {
+  const signature = createSignature(
+    method,
+    url,
+    {...body, ...params, ...oauthParams},
+    consumerSecret,
+    oauthTokenSecret,
+  );
+  return fetch(`${url}?${query(params)}`, {
     method,
     headers: {
-      ...headers,
       Authorization: `OAuth ${
         Object.entries({
-          ...authParams,
-          oauth_signature: createSignature(
-            method,
-            url,
-            authParams,
-            consumerSecret,
-            oauthTokenSecret,
-          ),
+          ...oauthParams,
+          oauth_signature: signature,
         })
           .map(([k, v]) => `${rfc3986(k)}="${rfc3986(v)}"`)
           .join(', ')
       }`,
+      ...method !== 'GET' || method !== 'HEAD' ?
+        {'Content-Type': 'application/x-www-form-urlencoded'} :
+        {},
+      ...headers,
     },
+    body: query(body),
     ...opts,
   })
     .then(response =>
