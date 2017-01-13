@@ -25,13 +25,12 @@ test.before.cb((t) => {
 
 test('make GET request', (t) => {
   const method = 'GET';
-  const url = 'https://api.twitter.com/1.1/application/rate_limit_status.json';
-  const params = {resources: 'help'};
+  const url = 'https://api.twitter.com/1.1/search/tweets.json';
+  const params = {q: ' !"#$%&\'()*+,-./:;<=>?@\\[]^_'};
   return request(url, {method, params}, tokens)
     .then(response => response.json())
-    .then(({resources: {help, users}}) => {
-      t.truthy(help);
-      t.falsy(users);
+    .then(({statuses}) => {
+      t.truthy(statuses);
     });
 });
 
