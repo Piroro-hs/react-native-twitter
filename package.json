@@ -15,6 +15,9 @@
         ]
       ]
     },
+    "files": [
+      "test/**/*.test.js"
+    ],
     "require": [
       "babel-register"
     ]
