@@ -55,6 +55,6 @@
     "url": "git+ssh://git@github.com/Piroro-hs/react-native-twitter.git"
   },
   "scripts": {
-    "test": "ava test/**/*.test.js"
+    "test": "ava"
   }
 }
