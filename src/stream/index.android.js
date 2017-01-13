@@ -3,7 +3,7 @@ import {NativeModules, NativeEventEmitter} from 'react-native';
 import EventEmitter from 'eventemitter3';
 
 import parser from './parser';
-import query from '../util/query';
+import {query} from '../util';
 
 const nativeEmitter = new NativeEventEmitter(NativeModules.RNTwitter);
 

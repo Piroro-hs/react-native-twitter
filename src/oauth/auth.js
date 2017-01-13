@@ -3,7 +3,7 @@ import {Linking} from 'react-native';
 import URLSearchParams from 'url-search-params';
 
 import request from './request';
-import query from '../util/query';
+import {query} from '../util';
 
 function getRequestToken(tokens, callbackUrl, accessType) {
   const method = 'POST';

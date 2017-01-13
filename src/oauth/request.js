@@ -1,10 +1,6 @@
 import JsSha from 'jssha';
 
-import query from '../util/query';
-
-function rfc3986(str) {
-  return encodeURIComponent(str).replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16)}`);
-}
+import {query, rfc3986} from '../util';
 
 function createSignature(
   method,
