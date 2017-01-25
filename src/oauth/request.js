@@ -37,7 +37,8 @@ export default function request(
     consumerSecret,
     oauthTokenSecret,
   );
-  return fetch(`${url}?${query(params)}`, {
+  const queryString = query(params);
+  return fetch(queryString ? `${url}?${queryString}` : url, {
     method,
     headers: {
       Authorization: `OAuth ${
