@@ -8,7 +8,7 @@ export default function buildHeaderString(
   method,
   params = {},
   extraParams = {},
-  {nonce = Math.random().toString().slice(2), timestamp = Math.floor(Date.now() / 1000)} = {},
+  {nonce = String(Math.random()).slice(2), timestamp = Math.floor(Date.now() / 1000)} = {},
 ) {
   const oauthParams = {
     oauth_consumer_key: consumerKey,
