@@ -1,58 +1,50 @@
-import {readFile} from 'fs';
-
 import test from 'ava';
 
-import fetch from 'node-fetch';
-import URLSearchParams from 'url-search-params';
-
 import request from '~/oauth/request';
+import mockFetch from '../mockFetch';
 
-let tokens;
+const tokens = {
+  consumerKey: 'consumerKey',
+  consumerSecret: 'consumerSecret',
+  oauthToken: 'oauthToken',
+  oauthTokenSecret: 'oauthTokenSecret',
+};
 
-test.before.cb((t) => {
-  global.fetch = fetch;
-  readFile('test/tokens.json', 'utf8', (_, json) => {
-    const {consumerKey, consumerSecret, accessToken, accessTokenSecret} = JSON.parse(json);
-    tokens = {
-      consumerKey,
-      consumerSecret,
-      oauthToken: accessToken,
-      oauthTokenSecret: accessTokenSecret,
-    };
-    t.end();
-  });
-});
-
-test('make GET request', (t) => {
+test('encode params according to RFC 3986', (t) => {
   const method = 'GET';
-  const url = 'https://api.twitter.com/1.1/search/tweets.json';
+  const url = 'encode params';
   const params = {q: ' !"#$%&\'()*+,-./:;<=>?@\\[]^_'};
-  return request(url, {method, params}, tokens)
-    .then(response => response.json())
-    .then(({statuses}) => {
-      t.truthy(statuses);
-    });
+  mockFetch(
+    `${url}?q=%20%21%22%23%24%25%26%27%28%29%2A%2B%2C-.%2F%3A%3B%3C%3D%3E%3F%40%5C%5B%5D%5E_`,
+    {cb: (err) => {t.falsy(err);}},
+  );
+  return request(tokens, url, {method, params});
 });
 
-test('make POST request / handle missing tokens / handle extra oauth params', (t) => {
+test('encode body according to RFC 3986', (t) => {
   const method = 'POST';
-  const url = 'https://api.twitter.com/oauth/request_token';
-  const body = {x_auth_access_type: 'write'};
-  return request(
-    url,
-    {method, body},
-    {consumerKey: tokens.consumerKey, consumerSecret: tokens.consumerSecret},
-    {oauth_callback: 'oob'},
-  )
-    .then(response => response.text())
-    .then((text) => {
-      const params = new URLSearchParams(text);
-      t.true(params.has('oauth_token') && params.has('oauth_token_secret'));
-    });
+  const url = 'encode body';
+  const reqBody = {q: ' !"#$%&\'()*+,-./:;<=>?@\\[]^_'};
+  mockFetch(url, {cb: (err, {body}) => {
+    t.falsy(err);
+    t.is(body, 'q=%20%21%22%23%24%25%26%27%28%29%2A%2B%2C-.%2F%3A%3B%3C%3D%3E%3F%40%5C%5B%5D%5E_');
+  }});
+  return request(tokens, url, {method, body: reqBody});
+});
+
+test('throw when HTTP status is not 200', (t) => {
+  const method = 'GET';
+  const url = 'throw when HTTP status is not 200';
+  mockFetch(url, {status: 201});
+  return t.throws(request(tokens, url, {method}));
 });
 
 test('parse Twitter API error messages', (t) => {
   const method = 'GET';
-  const url = 'https://api.twitter.com/1.1/not/exist.json';
-  return t.throws(request(url, {method}, tokens), '34 Sorry, that page does not exist');
+  const url = 'parse Twitter API error messages';
+  mockFetch(
+    url,
+    {body: '{"errors":[{"message":"Sorry, that page does not exist","code":34}]}', status: 404},
+  );
+  return t.throws(request(tokens, url, {method}), '34 Sorry, that page does not exist');
 });

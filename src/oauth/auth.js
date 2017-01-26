@@ -9,7 +9,7 @@ function getRequestToken(tokens, callbackUrl, accessType) {
   const method = 'POST';
   const url = 'https://api.twitter.com/oauth/request_token';
   const body = accessType ? {x_auth_access_type: accessType} : {};
-  return request(url, {method, body}, tokens, {oauth_callback: callbackUrl})
+  return request(tokens, url, {method, body}, {oauth_callback: callbackUrl})
     .then(response => response.text())
     .then((text) => {
       const params = new URLSearchParams(text);
@@ -27,9 +27,9 @@ function getAccessToken(
   const method = 'POST';
   const url = 'https://api.twitter.com/oauth/access_token';
   return request(
+    {consumerKey, consumerSecret, oauthToken: requestToken, oauthTokenSecret: requestTokenSecret},
     url,
     {method},
-    {consumerKey, consumerSecret, oauthToken: requestToken, oauthTokenSecret: requestTokenSecret},
     {oauth_verifier: oauthVerifier},
   )
     .then(response => response.text())

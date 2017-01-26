@@ -1,61 +1,25 @@
-import JsSha from 'jssha';
-
-import {query, rfc3986} from '../util';
-
-function createSignature(
-  method,
-  url,
-  params,
-  consumerSecret,
-  oauthTokenSecret = '',
-) {
-  const shaObj = new JsSha('SHA-1', 'TEXT');
-  shaObj.setHMACKey(`${rfc3986(consumerSecret)}&${rfc3986(oauthTokenSecret)}`, 'TEXT');
-  shaObj.update(`${rfc3986(method)}&${rfc3986(url)}&${rfc3986(query(params, true))}`);
-  return shaObj.getHMAC('B64');
-}
+import buildHeaderString from './buildHeaderString';
+import {query} from '../util';
 
 export default function request(
+  tokens,
   url,
-  {method, headers = {}, body = {}, params = {}, ...opts},
-  {consumerKey, consumerSecret, oauthToken = '', oauthTokenSecret = ''},
-  extraOAuthParams = {},
+  {method, headers = {}, body = {}, params = {}, ...init},
+  extraParams = {},
 ) {
-  const oauthParams = {
-    oauth_consumer_key: consumerKey,
-    oauth_nonce: Math.random(),
-    oauth_signature_method: 'HMAC-SHA1',
-    oauth_timestamp: Math.floor(Date.now() / 1000),
-    ...oauthToken ? {oauth_token: oauthToken} : {},
-    oauth_version: '1.0',
-    ...extraOAuthParams,
-  };
-  const signature = createSignature(
-    method,
-    url,
-    {...body, ...params, ...oauthParams},
-    consumerSecret,
-    oauthTokenSecret,
-  );
   const queryString = query(params);
+  const bodyString = query(body);
   return fetch(queryString ? `${url}?${queryString}` : url, {
     method,
     headers: {
-      Authorization: `OAuth ${
-        Object.entries({
-          ...oauthParams,
-          oauth_signature: signature,
-        })
-          .map(([k, v]) => `${rfc3986(k)}="${rfc3986(v)}"`)
-          .join(', ')
-      }`,
+      Authorization: buildHeaderString(tokens, url, method, {...body, ...params}, extraParams),
       ...method !== 'GET' && method !== 'HEAD' ?
         {'Content-Type': 'application/x-www-form-urlencoded'} :
         {},
       ...headers,
     },
-    body: query(body),
-    ...opts,
+    ...bodyString ? {body: bodyString} : {},
+    ...init,
   })
     .then(response =>
       response.status === 200 ?
