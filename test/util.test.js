@@ -1,8 +1,12 @@
 import test from 'ava';
 
-import {query, rfc3986} from '~/util';
+import {omit, query, replacePathParams, rfc3986} from '~/util';
 
-test('query: encode Objects to query string', (t) => {
+test('omit: omit keys in Object', (t) => {
+  t.deepEqual(omit(['a', 'b'], {a: 'a', b: 'b', c: 'c'}), {c: 'c'});
+});
+
+test('query: encode Object to query string', (t) => {
   t.is(
     query({' !"#$%&\'()*+,-./': ':;<=>?@\\[]^_'}),
     '%20%21%22%23%24%25%26%27%28%29%2A%2B%2C-.%2F=%3A%3B%3C%3D%3E%3F%40%5C%5B%5D%5E_',
@@ -18,6 +22,13 @@ test('query: encode strings according to W3C Recommendation when third argument 
   t.is(
     query({' !"#$%&\'()*+,-./': ':;<=>?@\\[]^_'}, true, true),
     '+%21%22%23%24%25%26%27%28%29*%2B%2C-.%2F=%3A%3B%3C%3D%3E%3F%40%5C%5B%5D%5E_',
+  );
+});
+
+test('replacePathParams: replace parameters in path strng, return path and replaced keys', (t) => {
+  t.deepEqual(
+    replacePathParams('path/:p0/:p1/:p2', {p1: 'a', p2: 'b', p3: 'c'}),
+    {replacedPath: 'path/:p0/a/b', replacedParamKeys: ['p1', 'p2']},
   );
 });
 

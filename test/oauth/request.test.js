@@ -3,6 +3,8 @@ import test from 'ava';
 import request from '~/oauth/request';
 import mockFetch from '../mockFetch';
 
+global.FormData = class FormData {}; // eslint-disable-line fp/no-mutation
+
 const tokens = {
   consumerKey: 'consumerKey',
   consumerSecret: 'consumerSecret',
@@ -32,14 +34,38 @@ test('encode body according to RFC 3986', (t) => {
   return request(tokens, url, {method, body: reqBody});
 });
 
-test('throw when HTTP status is not 200', (t) => {
-  const method = 'GET';
-  const url = 'throw when HTTP status is not 200';
-  mockFetch(url, {status: 201});
-  return t.throws(request(tokens, url, {method}));
+test('encode body to FormData', (t) => {
+  const method = 'POST';
+  const url = 'encode body to FormData';
+  const reqBody = {};
+  const headers = {'Content-Type': 'multipart/form-data'};
+  mockFetch(url, {cb: (err, {body}) => {
+    t.falsy(err);
+    t.true(body instanceof FormData);
+  }});
+  return request(tokens, url, {method, body: reqBody, headers});
 });
 
-test('parse Twitter API error messages', (t) => {
+test('encode body to JSON string', (t) => {
+  const method = 'POST';
+  const url = 'encode body to JSON string';
+  const reqBody = {a: 'a'};
+  const headers = {'Content-Type': 'application/json'};
+  mockFetch(url, {cb: (err, {body}) => {
+    t.falsy(err);
+    t.deepEqual(JSON.parse(body), {a: 'a'});
+  }});
+  return request(tokens, url, {method, body: reqBody, headers});
+});
+
+test('throw when HTTP status is not 2xx', (t) => {
+  const method = 'GET';
+  const url = 'throw when HTTP status is not 2xx';
+  mockFetch(url, {body: 'error', status: 300});
+  return t.throws(request(tokens, url, {method}), 'error');
+});
+
+test('parse Twitter API error messages if possible', (t) => {
   const method = 'GET';
   const url = 'parse Twitter API error messages';
   mockFetch(
