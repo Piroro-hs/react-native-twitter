@@ -24,8 +24,13 @@ export default function request(
     .then(response =>
       response.status === 200 ?
         response :
-        response.json().then(({errors: [{code, message}]}) =>
-          Promise.reject(new Error(`${code} ${message}`)),
-        ),
+        response.text().then((text) => {
+          try {
+            const {errors: [{code, message}]} = JSON.parse(text);
+            return Promise.reject(new Error(`${code} ${message}`));
+          } catch (e) {
+            return Promise.reject(new Error(text));
+          }
+        }),
     );
 }

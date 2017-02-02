@@ -4,8 +4,12 @@ export default function parser(emitter, {name, data}) {
     emitter.emit('error', new Error(data));
     break;
   case 'twitterError': {
-    const {errors: [{code, message}]} = data;
-    emitter.emit('error', new Error(`${code} ${message}`));
+    try {
+      const {errors: [{code, message}]} = JSON.parse(data);
+      emitter.emit('error', new Error(`${code} ${message}`));
+    } catch (e) {
+      emitter.emit('error', new Error(data));
+    }
     break;
   }
   default:
