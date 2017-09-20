@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.1'
+        classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 
@@ -29,7 +29,6 @@ repositories {
 
 dependencies {
     compile 'com.facebook.react:react-native:+'
-    // compile 'com.squareup.okhttp3:okhttp:3.+'
-    compile 'com.squareup.okhttp3:okhttp:3.4.+' // https://github.com/facebook/react-native/pull/11698
-    compile 'se.akerfeldt:okhttp-signpost:1.1.+'
+    compile 'com.squareup.okhttp3:okhttp:3.+'
+    compile 'se.akerfeldt:okhttp-signpost:1.+'
 }
