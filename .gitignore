@@ -1,4 +1,5 @@
 logs
 npm-debug.log*
 node_modules
-/test/tokens.json
+test/tokens.json
+android/build
