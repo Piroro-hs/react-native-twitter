@@ -23,6 +23,8 @@ npm i react-native-twitter -S
 react-native link
 ```
 
+If you use [3-legged authorization](https://dev.twitter.com/oauth/3-legged), you need to add the deep link scheme for your callback URL. See [React Native docs](https://facebook.github.io/react-native/docs/linking.html) and [example](https://github.com/Piroro-hs/react-native-twitter/blob/04377af08f2f4fbdc039dc52daafb8d6fb28171e/example/android/app/src/main/AndroidManifest.xml#L19-L34) for more info.
+
 ## Usage
 
 ```js
@@ -36,12 +38,12 @@ Get the client's authentication tokens via [3-legged authorization](https://dev.
 * tokens
   * `consumerKey` Your consumer key
   * `consumerSecret` Your consumer secret
-* `callbackUrl` The URL a user is redirected to, you need to add the deep link scheme for this URL (See [React Native docs](https://facebook.github.io/react-native/docs/linking.html).)
+* `callbackUrl` The URL a user is redirected to, you need to add the deep link scheme for this URL
 * `options`
-  * `accessType` Specify `x_auth_access_type` (See https://dev.twitter.com/oauth/reference/post/oauth/request_token#parameters.)
+  * `accessType` Specify `x_auth_access_type`, supported values are `'read'` or `'write'` (See [Twitter docs](https://dev.twitter.com/oauth/reference/post/oauth/request_token#parameters).)
   * `forSignIn` If `true`, [oauth/authenticate](https://dev.twitter.com/oauth/reference/get/oauth/authenticate) endpoint is used instead of [oauth/authorize](https://dev.twitter.com/oauth/reference/get/oauth/authorize) (Default: `false`)
-  *  `forceLogin` Specify `force_login` (See https://dev.twitter.com/oauth/reference/get/oauth/authorize#parameters.) (Default: `false`)
-  *  `screenName` Specify `screen_name` (See https://dev.twitter.com/oauth/reference/get/oauth/authorize#parameters.)
+  *  `forceLogin` Specify `force_login` (See [Twitter docs](https://dev.twitter.com/oauth/reference/get/oauth/authorize#parameters).) (Default: `false`)
+  *  `screenName` Specify `screen_name` (See [Twitter docs](https://dev.twitter.com/oauth/reference/get/oauth/authorize#parameters).)
 
 * Returns: `Promise` of `{accessToken, accessTokenSecret, id, name}`
   * `accessToken` Access token
@@ -54,6 +56,8 @@ Get the client's authentication tokens via [3-legged authorization](https://dev.
 Get the client's authentication tokens via [PIN-based authorization](https://dev.twitter.com/oauth/pin-based).
 
 * `pinPromise` `Promise` which resolves to PIN
+
+* Returns: `Promise` of `{accessToken, accessTokenSecret, id, name}`
 
 ### `const client = twitter(tokens)`
 
