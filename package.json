@@ -42,7 +42,8 @@
     "LICENSE",
     "README.md",
     "package.json",
-    "android",
+    "android/build.gradle",
+    "android/src",
     "src"
   ],
   "homepage": "https://github.com/Piroro-hs/react-native-twitter#readme",
