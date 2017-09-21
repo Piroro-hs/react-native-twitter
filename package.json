@@ -1,7 +1,7 @@
 {
   "name": "react-native-twitter",
   "description": "react-native-twitter",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Piroro-hs",
   "ava": {
     "babel": {
