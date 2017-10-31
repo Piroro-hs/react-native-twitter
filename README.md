@@ -44,6 +44,7 @@ Get the client's authentication tokens via [3-legged authorization](https://dev.
   * `forSignIn` If `true`, [oauth/authenticate](https://dev.twitter.com/oauth/reference/get/oauth/authenticate) endpoint is used instead of [oauth/authorize](https://dev.twitter.com/oauth/reference/get/oauth/authorize) (Default: `false`)
   *  `forceLogin` Specify `force_login` (See [Twitter docs](https://dev.twitter.com/oauth/reference/get/oauth/authorize#parameters).) (Default: `false`)
   *  `screenName` Specify `screen_name` (See [Twitter docs](https://dev.twitter.com/oauth/reference/get/oauth/authorize#parameters).)
+* `openUrl` specify an alternative method of opening twitter auth (e.g. a web modal)
 
 * Returns: `Promise` of `{accessToken, accessTokenSecret, id, name}`
   * `accessToken` Access token
