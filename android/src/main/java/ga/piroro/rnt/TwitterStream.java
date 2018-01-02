@@ -22,12 +22,12 @@ public class TwitterStream {
 
     public TwitterStream(final ReadableMap tokens, final String url, final NativeEmitter emitter) {
         OkHttpOAuthConsumer consumer = new OkHttpOAuthConsumer(
-                tokens.getString("consumerKey"),
-                tokens.getString("consumerSecret")
+            tokens.getString("consumerKey"),
+            tokens.getString("consumerSecret")
         );
         consumer.setTokenWithSecret(
-                tokens.getString("accessToken"),
-                tokens.getString("accessTokenSecret")
+            tokens.getString("accessToken"),
+            tokens.getString("accessTokenSecret")
         );
         Request request = new Request.Builder()
             .url(url)
@@ -49,11 +49,11 @@ public class TwitterStream {
                     StringBuilder builder = new StringBuilder();
                     int c;
                     boolean rFlag = false;
+                    int l;
                     while ((c = reader.read()) != -1) {
                         if (rFlag && c == '\n') {
-                            String data = builder.deleteCharAt(builder.length() - 1).toString(); // Remove \r.
-                            if (data != "") {
-                                emitter.emit("data", data);
+                            if ((l = builder.length()) > 1) {
+                                emitter.emit("data", builder.deleteCharAt(l - 1).toString()); // Remove \r.
                             }
                             builder.setLength(0);
                         } else {
