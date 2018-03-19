@@ -1,4 +1,4 @@
-import {Linking} from 'react-native';
+import {Linking,Modal} from 'react-native';
 
 import URLSearchParams from 'url-search-params';
 
@@ -63,6 +63,7 @@ export default async function auth(
   tokens,
   callbackUrl,
   {accessType, forSignIn = false, forceLogin = false, screenName = ''} = {},
+  openUrl
 ) {
   const usePin = typeof callbackUrl.then === 'function';
   const {requestToken, requestTokenSecret} = await getRequestToken(
@@ -70,9 +71,10 @@ export default async function auth(
     usePin ? 'oob' : callbackUrl,
     accessType,
   );
-  Linking.openURL(`https://api.twitter.com/oauth/${forSignIn ? 'authenticate' : 'authorize'}?${
-    query({oauth_token: requestToken, force_login: forceLogin, screen_name: screenName})
-  }`);
+  const url = `https://api.twitter.com/oauth/${forSignIn ? 'authenticate' : 'authorize'}?${
+      query({oauth_token: requestToken, force_login: forceLogin, screen_name: screenName})
+      }`;
+  openUrl ? openUrl(url):Linking.openURL(url);
   return getAccessToken(
     {...tokens, requestToken, requestTokenSecret},
     await (
