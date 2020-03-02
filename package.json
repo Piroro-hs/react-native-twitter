@@ -1,0 +1,95 @@
+{
+  "_from": "react-native-twitter@^0.2.1",
+  "_id": "react-native-twitter@0.2.1",
+  "_inBundle": false,
+  "_integrity": "sha512-JJ8pt24LGItsID3H3WVDxO07UjTd5yByMFmeR0WDApDJtnBBOzyfNWWC9k7dh/QEjrHLqIX23BFlkH/Wfqfh6Q==",
+  "_location": "/react-native-twitter",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "react-native-twitter@^0.2.1",
+    "name": "react-native-twitter",
+    "escapedName": "react-native-twitter",
+    "rawSpec": "^0.2.1",
+    "saveSpec": null,
+    "fetchSpec": "^0.2.1"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-twitter/-/react-native-twitter-0.2.1.tgz",
+  "_shasum": "28398aeae077247d9433e2b6bdac7bf4b05db4a5",
+  "_spec": "react-native-twitter@^0.2.1",
+  "_where": "/Users/olayinkaotuniyi/Desktop/development/codeProject/Blender",
+  "author": {
+    "name": "Piroro-hs"
+  },
+  "ava": {
+    "babel": {
+      "babelrc": true,
+      "plugins": [
+        [
+          "babel-root-import",
+          {
+            "rootPathSuffix": "src"
+          }
+        ]
+      ]
+    },
+    "files": [
+      "test/**/*.test.js"
+    ],
+    "require": [
+      "babel-register"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/Piroro-hs/react-native-twitter/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "eventemitter3": "^2.0.3",
+    "jssha": "^2.3.1",
+    "url-search-params": "^0.10.0"
+  },
+  "deprecated": false,
+  "description": "react-native-twitter",
+  "devDependencies": {
+    "ava": "^0.22.0",
+    "babel-preset-react-native": "^4.0.0",
+    "babel-root-import": "^4.1.8",
+    "eslint": "^4.7.1",
+    "eslint-config-piroro": "github:piroro-hs/eslint-config-piroro",
+    "node-fetch": "^1.7.3"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "package.json",
+    "android/build.gradle",
+    "android/src",
+    "src"
+  ],
+  "homepage": "https://github.com/Piroro-hs/react-native-twitter#readme",
+  "keywords": [
+    "api",
+    "oauth",
+    "react-native",
+    "twitter"
+  ],
+  "license": "MIT",
+  "main": "./src/index.js",
+  "name": "react-native-twitter",
+  "peerDependencies": {
+    "react-native": ">=0.47.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Piroro-hs/react-native-twitter.git"
+  },
+  "scripts": {
+    "test": "ava"
+  },
+  "version": "0.2.1"
+}
