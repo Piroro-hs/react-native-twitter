@@ -36,7 +36,7 @@
     "babel-root-import": "^4.1.8",
     "eslint": "^4.7.1",
     "eslint-config-piroro": "github:piroro-hs/eslint-config-piroro",
-    "node-fetch": "^1.7.3"
+    "node-fetch": "^2.6.7"
   },
   "files": [
     "LICENSE",
